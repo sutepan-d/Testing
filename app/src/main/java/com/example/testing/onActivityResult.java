@@ -48,7 +48,7 @@ public class onActivityResult extends AppCompatActivity {
             }
         }
         Intent back = new Intent(onActivityResult.this, MainActivity.class);
-        back.putExtra(mPhoneNumber, mContactId);
+        back.putExtra(mPhoneNumber, mContactName);
         setResult(RESULT_OK, back);
     }
 }

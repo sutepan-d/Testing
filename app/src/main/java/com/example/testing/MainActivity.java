@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent forw = new Intent(this, MainActivity.class);
                             forw.putExtra(mPhoneNumber, mContactName);
                             setResult(RESULT_OK, forw);
-                        }
+                    }
                         phones.close();
                     }
                 }
