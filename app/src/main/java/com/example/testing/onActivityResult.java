@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-public class onActivityResult extends MainActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class onActivityResult extends AppCompatActivity {
 
     private static final int CONTACT_PICK_RESULT = 1;
 
@@ -45,5 +47,8 @@ public class onActivityResult extends MainActivity {
                 }
             }
         }
+        Intent back = new Intent(onActivityResult.this, MainActivity.class);
+        back.putExtra(mPhoneNumber, mContactId);
+        setResult(RESULT_OK, back);
     }
 }
