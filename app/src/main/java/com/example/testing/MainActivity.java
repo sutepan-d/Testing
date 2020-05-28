@@ -18,7 +18,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     TelephonyManager telephonyManager;
     BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
-    String mPhoneNumber;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +25,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (bluetooth.isEnabled()) {
-            final Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
             PhoneStateListener phoneStateListener = new PhoneStateListener(){
-                public void onCallStateChanged(int state, String phoneNumber) {
-                    switch (state) {
-                        case TelephonyManager.CALL_STATE_IDLE:
-                        case TelephonyManager.CALL_STATE_OFFHOOK:
-                            break;
-                        case TelephonyManager.CALL_STATE_RINGING:
-                            mPhoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            Toast.makeText(getApplicationContext(), "Tel:" + phoneNumber + mPhoneNumber, Toast.LENGTH_LONG).show();
-                            break;
+                public void onCallStateChanged(int state, String mPhoneNumber) {
+                    if (state == TelephonyManager.CALL_STATE_RINGING) {
+                        Toast.makeText(getApplicationContext(), "Tel:" +  mPhoneNumber, Toast.LENGTH_LONG).show();
                     }
                 }
             };
