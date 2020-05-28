@@ -14,9 +14,13 @@ import android.provider.ContactsContract;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter adapter;
     TelephonyManager telephonyManager;
     BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
-
+    ArrayList<String> num = new ArrayList();
     @RequiresApi(api = Build.VERSION_CODES.O)
 
     @Override
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        num.add("89025162826");
         if (bluetooth.isEnabled()) {
             PhoneStateListener phoneStateListener = new PhoneStateListener() {
                 public void onCallStateChanged(int state, String incomingNumber) {
@@ -63,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, RESULT_CANCELED);
         }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String tel = num.get(position);
+                adapter = new ArrayAdapter(getApplicationContext(), R.layout.list);
+                listView.setAdapter(adapter);
+            }
+        });
     }
 
     public void contactResult() {
@@ -77,6 +90,6 @@ public class MainActivity extends AppCompatActivity {
             setResult(RESULT_OK, forw);
         }
         phones.close();
-        adapter = new ArrayAdapter(this, R.layout.list);
     }
+
 }
