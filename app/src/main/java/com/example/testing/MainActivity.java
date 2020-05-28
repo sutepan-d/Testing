@@ -28,13 +28,14 @@ public class MainActivity extends AppCompatActivity {
     TelephonyManager telephonyManager;
     BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
     @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (bluetooth.isEnabled()) {
-            PhoneStateListener phoneStateListener = new PhoneStateListener(){
+                PhoneStateListener phoneStateListener = new PhoneStateListener(){
                 public void onCallStateChanged(int state, String phoneNumber) {
                     if (state == TelephonyManager.CALL_STATE_RINGING) {
                         Intent forward = new Intent(MainActivity.this, onActivityResult.class);
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-
             if (requestCode == CONTACT_PICK_RESULT) {
                 Uri contactData = data.getData();
                 assert contactData != null;
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                     mContactId = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
                     mContactName = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
                     String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-
                     Log.d(LOG_TAG, "name: " + mContactName);
                     Log.d(LOG_TAG, "hasPhone:" + hasPhone);
                     Log.d(LOG_TAG, "contactId:" + mContactId);
@@ -77,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
                         assert phones != null;
                         while (phones.moveToNext()) {
                             mPhoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
+                            Intent forw = new Intent(this, MainActivity.class);
+                            forw.putExtra(mPhoneNumber, mContactName);
+                            setResult(RESULT_OK, forw);
                         }
                         phones.close();
                     }
